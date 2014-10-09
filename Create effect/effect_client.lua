@@ -1,54 +1,44 @@
 ﻿--[[
-	Script:	Effect System v1.0
-		v1.0
-		** Создание эффектов. Кол-во эффектов - 82.
-		** Задание позиции и ротации для эффекта.
-		** Изменение скорости и насыщености эффекта.
-		v1.1
-		** Поддержка добавления эффектов к ТС, оружию, педу.
-		** Сохранение в виде Lua кода.
+	** Создание эффектов. Кол-во эффектов - 82.
+	** Задание позиции и ротации для эффекта.
+	** Изменение скорости и насыщености эффекта.
 	Author:	Luc1feR aka Mx-RoN	
 	Data:	20.06.2014
-New scripting functions:
-effect  createEffect		(effectName, posX, posY, posZ[, rotX, rotY, rotZ])
-void    setEffectSpeed		(effect, speed) 									-- Speed controls how fast the effect will play, defaults to 1.0f
-float   getEffectSpeed		(effect)
-void    setEffectDensity	(effect, density) 									-- Speed controls how often the effect particles are spawned, defaults to 1.0f
-float   getEffectDenstity	(effect)
 ]]
-							-----------------
-							-- Создание GUI--
-							-----------------
+					-----------------
+					-- Создание GUI--
+					-----------------
 	local ESedit		= {}
 	local ESlabel		= {}
 	local ESwindow 		= guiCreateWindow(390, 263, 400, 415, "Создание эффекта", false)
 	local ESbutton 		= guiCreateButton(150, 340, 100, 25, "Создать эффект", false, ESwindow)
 	local ESgridlist 	= guiCreateGridList(228, 24, 163, 305, false, ESwindow)
 	
-	ESlabel[1]			= guiCreateLabel(5, 25, 205, 15, "Введите необходимые данные:", false, ESwindow)
-	ESlabel[2] 			= guiCreateLabel(0, 55, 210, 15, "Введите координаты", false, ESwindow)
-	ESlabel[3]			= guiCreateLabel(15, 75, 41, 24, "X", false, ESwindow)-- Позиция по x
-	ESlabel[4] 			= guiCreateLabel(15, 105, 41, 24, "Y", false, ESwindow)-- Позиция по y
-	ESlabel[5]			= guiCreateLabel(15, 135, 41, 24, "Z", false, ESwindow)-- Позиция по z
-	ESlabel[6] 			= guiCreateLabel(0, 165, 210, 15, "Введите направление (ротацию)", false,ESwindow)
-	ESlabel[7]			= guiCreateLabel(15, 186, 41, 24, "X", false, ESwindow)	-- Ротация по x
-	ESlabel[8]			= guiCreateLabel(15, 216, 41, 24, "Y", false, ESwindow)	-- Ротация по y
-	ESlabel[9]			= guiCreateLabel(15, 245, 41, 24, "Z", false, ESwindow)	-- Ротация по z
+	ESlabel[1]		= guiCreateLabel(5, 25, 205, 15, "Введите необходимые данные:", false, ESwindow)
+	ESlabel[2] 		= guiCreateLabel(0, 55, 210, 15, "Введите координаты", false, ESwindow)
+	ESlabel[3]		= guiCreateLabel(15, 75, 41, 24, "X", false, ESwindow)-- Позиция по x
+	ESlabel[4] 		= guiCreateLabel(15, 105, 41, 24, "Y", false, ESwindow)-- Позиция по y
+	ESlabel[5]		= guiCreateLabel(15, 135, 41, 24, "Z", false, ESwindow)-- Позиция по z
+	ESlabel[6] 		= guiCreateLabel(0, 165, 210, 15, "Введите направление (ротацию)", false,ESwindow)
+	ESlabel[7]		= guiCreateLabel(15, 186, 41, 24, "X", false, ESwindow)	-- Ротация по x
+	ESlabel[8]		= guiCreateLabel(15, 216, 41, 24, "Y", false, ESwindow)	-- Ротация по y
+	ESlabel[9]		= guiCreateLabel(15, 245, 41, 24, "Z", false, ESwindow)	-- Ротация по z
 	ESlabel[10] 		= guiCreateLabel(15, 275, 85, 25, "Скорость", false, ESwindow)
 	ESlabel[11] 		= guiCreateLabel(15, 305, 85, 25, "Густота", false, ESwindow)
-	EShelplabel			= guiCreateLabel(0, 370, 400, 37, "Внимание!\nПо умолчанию установлено текущее положение персонажа.\nСкорость и густота стандартные.", false, ESwindow)	
+	EShelplabel		= guiCreateLabel(0, 370, 400, 37, "Внимание!\nПо умолчанию установлено текущее положение персонажа.\nСкорость и густота стандартные.", false, ESwindow)	
 		
-	ESedit[1]			= guiCreateEdit(100, 75, 110, 25, "", false, ESwindow)	-- Позиция по x
-	ESedit[2] 			= guiCreateEdit(100, 105, 110, 25, "", false, ESwindow)	-- Позиция по y
-	ESedit[3]			= guiCreateEdit(100, 135, 110, 25, "", false, ESwindow)	-- Позиция по z
-	ESedit[4]			= guiCreateEdit(100, 185, 110, 25, "", false, ESwindow)	-- Ротация по x
-	ESedit[5]			= guiCreateEdit(100, 215, 110, 25, "", false, ESwindow)	-- Ротация по y
-	ESedit[6]			= guiCreateEdit(100, 245, 110, 25, "", false, ESwindow)	-- Ротация по z
-	ESedit[7] 			= guiCreateEdit(100, 275, 110, 25, "", false, ESwindow)	-- Скорость
-	ESedit[8]			= guiCreateEdit(100, 305, 110, 25, "", false, ESwindow)	-- Насыщеность 
-							------------------------------
-							-- Настройки компонентов GUI--
-							------------------------------
+	ESedit[1]		= guiCreateEdit(100, 75, 110, 25, "", false, ESwindow)	-- Позиция по x
+	ESedit[2] 		= guiCreateEdit(100, 105, 110, 25, "", false, ESwindow)	-- Позиция по y
+	ESedit[3]		= guiCreateEdit(100, 135, 110, 25, "", false, ESwindow)	-- Позиция по z
+	ESedit[4]		= guiCreateEdit(100, 185, 110, 25, "", false, ESwindow)	-- Ротация по x
+	ESedit[5]		= guiCreateEdit(100, 215, 110, 25, "", false, ESwindow)	-- Ротация по y
+	ESedit[6]		= guiCreateEdit(100, 245, 110, 25, "", false, ESwindow)	-- Ротация по z
+	ESedit[7] 		= guiCreateEdit(100, 275, 110, 25, "", false, ESwindow)	-- Скорость
+	ESedit[8]		= guiCreateEdit(100, 305, 110, 25, "", false, ESwindow)	-- Насыщеность 
+					------------------------------
+					-- Настройки компонентов GUI--
+					------------------------------
+					
 -- Устанавливаем положение, шрифт и цвет ко всем ESlabel
 	for k,v in ipairs (ESlabel) do
 		guiLabelSetVerticalAlign(v,"center")
@@ -74,9 +64,9 @@ float   getEffectDenstity	(effect)
 	guiLabelSetColor(EShelplabel, 12,186,65)
 	guiLabelSetHorizontalAlign(EShelplabel, "center", false)
 	guiLabelSetVerticalAlign(EShelplabel, "center")
-								-----------------
-								-- Открытие GUI--
-								-----------------
+						-----------------
+						-- Открытие GUI--
+						-----------------
 -- Устанавливаем положение в цетре экрана	
 function CenterWindows(windows)
     local sW,sH=guiGetScreenSize()
