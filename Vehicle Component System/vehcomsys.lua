@@ -3,14 +3,14 @@
 	Author:	Luc1feR aka Mx-RoN	
 	Data:	17.06.2014
 ]]
-								-----------------
-								-- Создание GUI--
-								-----------------
-	local Label				= {}
-	local Button			= {}
-	local Edit				= {} 
-	local RadioButton		= {}
-	local VCSwindow			= guiCreateWindow(329, 185, 449, 452, "Vehicle Component System", false) 
+						-----------------
+						-- Создание GUI--
+						-----------------
+	local Label		= {}
+	local Button		= {}
+	local Edit		= {} 
+	local RadioButton	= {}
+	local VCSwindow		= guiCreateWindow(329, 185, 449, 452, "Vehicle Component System", false) 
  	local GridVehComponent	= guiCreateGridList(270, 38, 164, 345, false, VCSwindow)
 	
 	Edit[1] = guiCreateEdit(170, 83, 70, 25, "0", false, VCSwindow)		-- Rotation X
@@ -37,9 +37,9 @@
 	Button[8] = guiCreateButton(25, 253, 100, 30, "Вернуть положение компонента", false, VCSwindow)
 	Button[9] = guiCreateButton(156, 253, 100, 30, "Вернуть положение всех компонентов", false, VCSwindow)
 	Button[10] = guiCreateButton(304, 403, 100, 30, "Обновить", false, VCSwindow)
-								------------------------------
-								-- Настройки компонентов GUI--
-								------------------------------
+						------------------------------
+						-- Настройки компонентов GUI--
+						------------------------------
 -- Устанавливаем выделение, шрифт и цвет ко всем RadioButton
 	for k,v in pairs (RadioButton) do	
 		guiSetFont(v,"default-small")
@@ -66,11 +66,10 @@
 	guiSetAlpha(VCSwindow,1.00)
 	guiSetProperty(VCSwindow,"CaptionColour","FF0CBA41")
 	guiSetVisible(VCSwindow, false)
-	
 	guiGridListAddColumn(GridVehComponent,	"Список компонентов",0.9)
-								-----------------
-								-- Открытие GUI--
-								-----------------
+						-----------------
+						-- Открытие GUI--
+						-----------------
 -- Устанавливаем положение в цетре экрана	
 function CenterWindows(windows)
     local sW,sH=guiGetScreenSize()
@@ -109,14 +108,14 @@ function ShowVCSwindow(thePlayer)
 	end	
 end
 bindKey("X", "down", ShowVCSwindow)
-								------------------
-								--Работа кнопок--
-								-----------------
-	local showBoolToColor =
-	{
-		[true]	= {12, 186, 65},
-		[false]	= {120,120,255}
-	}	
+						------------------
+						--Работа кнопок--
+						-----------------
+local showBoolToColor =
+{
+	[true]	= {12, 186, 65},
+	[false]	= {120,120,255}
+}	
 	
 -- Очистка GridList
 function Clean()
@@ -134,22 +133,22 @@ function (b,thePlayer)
 		local row,column = guiGridListGetSelectedItem(GridVehComponent)
 		if row >= 0 then
 			local Veh = getPedOccupiedVehicle(localPlayer)
-			local theComponent	= guiGridListGetItemText(GridVehComponent,row,1)
-			local x, y, z		= getVehicleComponentPosition(Veh,theComponent)
-			local rx, ry, rz	= getVehicleComponentRotation(Veh,theComponent)
-			local showBool 		= getVehicleComponentVisible(Veh,theComponent)
+			local theComponent = guiGridListGetItemText(GridVehComponent,row,1)
+			local x, y, z = getVehicleComponentPosition(Veh,theComponent)
+			local rx, ry, rz = getVehicleComponentRotation(Veh,theComponent)
+			local showBool = getVehicleComponentVisible(Veh,theComponent)
 			local old = {showBool,theComponent,x,y,z,rx,ry,rz}
 			if old then
-				local x = 	guiGetText(Edit[1])
-				local y = 	guiGetText(Edit[2])
-				local z =	guiGetText(Edit[3])
-				local rx = 	guiGetText(Edit[4])
-				local ry = 	guiGetText(Edit[5])
-				local rz = 	guiGetText(Edit[6])			
+				local x = guiGetText(Edit[1])
+				local y = guiGetText(Edit[2])
+				local z = guiGetText(Edit[3])
+				local rx = guiGetText(Edit[4])
+				local ry = guiGetText(Edit[5])
+				local rz = guiGetText(Edit[6])			
 				local new = {showBool,theComponent,x,y,z,rx,ry,rz}
 				if old ~= new then                     
-					setVehicleComponentPosition (Veh,theComponent,x,y,z)
-					setVehicleComponentRotation (Veh,theComponent,rx,ry,rz)
+					setVehicleComponentPosition(Veh,theComponent,x,y,z)
+					setVehicleComponentRotation(Veh,theComponent,rx,ry,rz)
 					setVehicleComponentVisible(Veh,theComponent,showBool)
 				end
 			end
@@ -208,9 +207,9 @@ function (b,thePlayer)
 	if (b =="left") and (source == Button[5]) then
 		local row,column = guiGridListGetSelectedItem(GridVehComponent)
 		if row >= 0 then
-			local theComponent	= guiGridListGetItemText(GridVehComponent,row,1)
-			local Veh			= getPedOccupiedVehicle(localPlayer)
-			local r,g,b			= unpack(showBoolToColor[getVehicleComponentVisible(Veh,theComponent)])	
+			local theComponent = guiGridListGetItemText(GridVehComponent,row,1)
+			local Veh = getPedOccupiedVehicle(localPlayer)
+			local r,g,b = unpack(showBoolToColor[getVehicleComponentVisible(Veh,theComponent)])	
 			setVehicleComponentVisible(Veh,theComponent,false)				
 			guiGridListSetItemColor(GridVehComponent,row,1,r,g,b)
 			Update()
@@ -239,9 +238,9 @@ function (b,thePlayer)
 	if (b =="left") and (source == Button[7]) then
 		local row,column = guiGridListGetSelectedItem(GridVehComponent)
 		if row >= 0 then
-			local theComponent	= guiGridListGetItemText(GridVehComponent,row,1)
-			local Veh			= getPedOccupiedVehicle(localPlayer)
-			local r,g,b			= unpack(showBoolToColor[getVehicleComponentVisible(Veh,theComponent)])	
+			local theComponent = guiGridListGetItemText(GridVehComponent,row,1)
+			local Veh = getPedOccupiedVehicle(localPlayer)
+			local r,g,b = unpack(showBoolToColor[getVehicleComponentVisible(Veh,theComponent)])	
 			setVehicleComponentVisible(Veh,theComponent,true)				
 			guiGridListSetItemColor(GridVehComponent,row,1,r,g,b)
 			Update()
@@ -255,8 +254,8 @@ function (b,thePlayer)
 	if (b =="left") and (source == Button[8]) then
 		local row,column = guiGridListGetSelectedItem(GridVehComponent)
 		if row >= 0 then
-			local theComponent	= guiGridListGetItemText(GridVehComponent,row,1)
-			local Veh			= getPedOccupiedVehicle(localPlayer)
+			local theComponent = guiGridListGetItemText(GridVehComponent,row,1)
+			local Veh = getPedOccupiedVehicle(localPlayer)
 			resetVehicleComponentPosition(Veh,theComponent)
 			resetVehicleComponentRotation(Veh,theComponent)
 			Update()
@@ -295,7 +294,7 @@ function Update()
 		if (Veh) then
 			local comp = getVehicleComponents(Veh)
 			for k in pairs (comp) do
-				local row 	= guiGridListAddRow(GridVehComponent)
+				local row = guiGridListAddRow(GridVehComponent)
 				local r,g,b = unpack(showBoolToColor[getVehicleComponentVisible(Veh,k)])
 				guiGridListSetItemText(GridVehComponent,row,1,k,false,false)
 				guiGridListSetItemColor(GridVehComponent,row,1,r,g,b)
@@ -307,12 +306,12 @@ end
 addEventHandler("onClientGUIClick",root,
 function ()
 	if source == GridVehComponent then
-		local row,column		= guiGridListGetSelectedItem(GridVehComponent)
+		local row,column = guiGridListGetSelectedItem(GridVehComponent)
 		if row >= 0 then
-			local theComponent	= guiGridListGetItemText(GridVehComponent,row,1)
-			local Veh			= getPedOccupiedVehicle(localPlayer)
-			local x, y, z		= getVehicleComponentPosition(Veh,theComponent)
-			local rx, ry, rz	= getVehicleComponentRotation(Veh,theComponent)
+			local theComponent = guiGridListGetItemText(GridVehComponent,row,1)
+			local Veh = getPedOccupiedVehicle(localPlayer)
+			local x, y, z = getVehicleComponentPosition(Veh,theComponent)
+			local rx, ry, rz = getVehicleComponentRotation(Veh,theComponent)
 			guiSetText(Edit[1],x)
 			guiSetText(Edit[2],y)
 			guiSetText(Edit[3],z)
